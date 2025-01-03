@@ -1,0 +1,28 @@
+\input{references_config.tex}
+
+% Create a reference and set its value
+\newcommand{\createref}[2]{
+  \expandafter\def\csname ref-#1\endcsname{} % Define the reference symbol
+  \def\tmphtml{html}%
+  \def\tmppdf{pdf}%
+  \ifx\pdfhtmlmode\tmphtml
+    \expandafter\def\csname refval-#1\endcsname{\htmlprefix#2.html} % Set the reference value for HTML mode
+  \else\ifx\pdfhtmlmode\tmppdf
+    \expandafter\def\csname refval-#1\endcsname{\reporoot#2.pdf} % Set the reference value for PDF mode
+  \else
+    \PackageError{reference-lib}{pdfhtmlmode has an invalid value: \pdfhtmlmode}{Compilation stopped due to a critical error.}
+    \stop % Stop compilation
+  \fi\fi
+}
+ 
+% Get the value of a reference
+\makeatletter
+\newcommand{\getref}[1]{%
+  \expandafter\@firstofone\expandafter{\csname refval-#1\endcsname}%
+}
+\makeatother
+
+
+\input{references.tex}
+
+
